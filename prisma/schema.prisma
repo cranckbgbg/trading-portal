@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  FREE
+  SUBSCRIBER
+  ADMIN
+}
+
+enum NewsCategory {
+  FOREX
+  GOLD
+  CRYPTO
+  MACRO
+}
+
+enum TradeDirection {
+  LONG
+  SHORT
+}
+
+enum TradeSetupStatus {
+  ACTIVE
+  WIN
+  LOSS
+}
+
+model User {
+  id               String         @id @default(cuid())
+  email            String         @unique
+  name             String?
+  emailVerified    DateTime?
+  image            String?
+  role             UserRole       @default(FREE)
+  stripeCustomerId String?        @unique
+  createdAt        DateTime       @default(now())
+  accounts         Account[]
+  sessions         Session[]
+  subscriptions    Subscription[]
+  journalEntries   JournalEntry[]
+  articleProgress  ArticleProgress[]
+  watchlist         WatchlistItem[]
+}
+
+model Article {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  content     String
+  category    String
+  coverImage  String?
+  publishedAt DateTime  @default(now())
+}
+
+model News {
+  id          String       @id @default(cuid())
+  title       String
+  slug        String       @unique
+  content     String
+  source      String?
+  sourceUrl   String?
+  category    NewsCategory
+  publishedAt DateTime     @default(now())
+}
+
+model TradeSetup {
+  id          String          @id @default(cuid())
+  symbol      String
+  direction   TradeDirection
+  entryPrice  Decimal
+  takeProfit  Decimal
+  stopLoss    Decimal
+  status      TradeSetupStatus @default(ACTIVE)
+  publishedAt DateTime        @default(now())
+  closedAt    DateTime?
+}
+
+model MarketBrief {
+  id          String   @id @default(cuid())
+  title       String
+  body        String
+  markets     String[]
+  publishedAt DateTime @default(now())
+}
+
+model JournalEntry {
+  id         String         @id @default(cuid())
+  userId     String
+  symbol     String
+  direction  TradeDirection
+  entryPrice Decimal
+  exitPrice  Decimal?
+  lotSize    Decimal        @default(0.01)
+  outcome    String?
+  pnl        Decimal?
+  notes      String?
+  tradeDate  DateTime       @default(now())
+  createdAt  DateTime       @default(now())
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ArticleProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  articleId String
+  readAt    DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+}
+
+model WeeklyRecap {
+  id          String   @id @default(cuid())
+  weekLabel   String
+  summary     String
+  wins        Int
+  losses      Int
+  keyLesson   String
+  publishedAt DateTime @default(now())
+}
+
+model WatchlistItem {
+  id      String   @id @default(cuid())
+  userId  String
+  symbol  String
+  addedAt DateTime @default(now())
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, symbol])
+}
+
+model Subscription {
+  id                   String   @id @default(cuid())
+  userId               String
+  stripeSubscriptionId String   @unique
+  status               String
+  currentPeriodEnd     DateTime
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
