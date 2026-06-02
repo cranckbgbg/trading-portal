@@ -65,6 +65,36 @@ export default async function HomePage() {
 
       <TestimonialsSection />
 
+      {/* HOW IT WORKS */}
+      <section className="container py-16">
+        <div className="mb-12 text-center">
+          <p className="text-sm font-semibold uppercase tracking-wide text-green-400">Simple process</p>
+          <h2 className="mt-2 text-3xl font-bold text-white md:text-4xl">How ApexTrade works</h2>
+        </div>
+        <div className="relative grid gap-8 md:grid-cols-3">
+          <div className="absolute left-1/4 right-1/4 top-8 hidden h-px bg-gradient-to-r from-transparent via-green-500/40 to-transparent md:block" />
+
+          <HowItWorksStep
+            number="01"
+            title="Subscribe"
+            description="Choose a Monthly or Annual plan. Instant access to the full trade setup feed, academy, journal, and economic calendar."
+            icon="🔑"
+          />
+          <HowItWorksStep
+            number="02"
+            title="Follow the setups"
+            description="Each setup includes entry, take profit, and stop loss. Study the reasoning, track it in your journal, and build your process."
+            icon="📊"
+          />
+          <HowItWorksStep
+            number="03"
+            title="Review and improve"
+            description="Every Friday — a weekly recap. Every setup is closed as WIN or LOSS. Full transparency. Track your progress over time."
+            icon="📈"
+          />
+        </div>
+      </section>
+
       <section className="container pb-6">
         <MarketBriefCard brief={latestBrief} />
       </section>
@@ -225,6 +255,31 @@ function Feature({ icon, title, text }: { icon: React.ReactNode; title: string; 
       </div>
       <h3 className="font-semibold text-white">{title}</h3>
       <p className="mt-2 text-sm leading-6 text-slate-400">{text}</p>
+    </div>
+  );
+}
+
+function HowItWorksStep({
+  number,
+  title,
+  description,
+  icon
+}: {
+  number: string;
+  title: string;
+  description: string;
+  icon: string;
+}) {
+  return (
+    <div className="relative flex flex-col items-center text-center">
+      <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border border-green-500/40 bg-slate-900 text-2xl">
+        {icon}
+      </div>
+      <div className="absolute left-1/2 top-6 z-0 flex h-5 w-5 -translate-x-1/2 items-center justify-center">
+        <span className="text-xs font-bold text-green-400">{number}</span>
+      </div>
+      <h3 className="mt-5 text-xl font-semibold text-white">{title}</h3>
+      <p className="mt-3 max-w-xs text-sm leading-6 text-slate-400">{description}</p>
     </div>
   );
 }
