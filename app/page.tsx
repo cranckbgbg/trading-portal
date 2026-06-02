@@ -233,6 +233,57 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* PRICING PREVIEW */}
+      <section className="container py-16">
+        <div className="mb-12 text-center">
+          <p className="text-sm font-semibold uppercase tracking-wide text-green-400">Simple pricing</p>
+          <h2 className="mt-2 text-3xl font-bold text-white md:text-4xl">Choose your plan</h2>
+          <p className="mt-3 text-slate-400">Full access. Cancel any time. No hidden fees.</p>
+        </div>
+        <div className="mx-auto grid max-w-3xl gap-5 md:grid-cols-2">
+          <div className="rounded-xl border border-white/10 bg-card p-8">
+            <p className="text-sm font-semibold uppercase tracking-wide text-slate-400">Monthly</p>
+            <p className="mt-3 text-5xl font-bold text-white">
+              $49<span className="text-lg font-normal text-slate-500">/mo</span>
+            </p>
+            <p className="mt-2 text-sm text-slate-400">Full access with monthly flexibility.</p>
+            <ul className="mt-6 grid gap-3">
+              {["Live trade setup feed", "Trade journal", "Economic calendar", "Weekly recaps", "Full academy access"].map((feature) => (
+                <li key={feature} className="flex items-center gap-2 text-sm text-slate-300">
+                  <span className="text-green-400">✓</span> {feature}
+                </li>
+              ))}
+            </ul>
+            <Button asChild className="mt-8 w-full" variant="ghost">
+              <Link href="/pricing">Get Monthly</Link>
+            </Button>
+          </div>
+          <div className="relative rounded-xl border border-green-500/60 bg-card p-8">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+              <Badge className="bg-green-500 font-semibold text-slate-950">Best value</Badge>
+            </div>
+            <p className="text-sm font-semibold uppercase tracking-wide text-slate-400">Annual</p>
+            <p className="mt-3 text-5xl font-bold text-white">
+              $399<span className="text-lg font-normal text-slate-500">/yr</span>
+            </p>
+            <p className="mt-2 text-sm font-semibold text-green-400">Save $189 — 2 months free</p>
+            <ul className="mt-6 grid gap-3">
+              {["Everything in Monthly", "Priority setup alerts", "Quarterly strategy reports", "Two months included", "Early access to new features"].map((feature) => (
+                <li key={feature} className="flex items-center gap-2 text-sm text-slate-300">
+                  <span className="text-green-400">✓</span> {feature}
+                </li>
+              ))}
+            </ul>
+            <Button asChild className="mt-8 w-full">
+              <Link href="/pricing">Get Annual</Link>
+            </Button>
+          </div>
+        </div>
+        <p className="mt-6 text-center text-xs text-slate-600">
+          Payments processed securely via Stripe · Cancel any time · Educational content only
+        </p>
+      </section>
+
       {/* PRE-FOOTER CTA */}
       <section className="container py-16">
         <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-8 py-14 text-center md:px-16">
