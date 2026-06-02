@@ -11,6 +11,7 @@ import {
   XCircle
 } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
+import { CountUp } from "@/components/count-up";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -54,9 +55,9 @@ export default async function AboutPage() {
         description="ApexTrade is built by an active trader for traders who want structure, transparency, and education — not noise."
       />
       <section className="container grid gap-5 pb-10 md:grid-cols-3">
-        <Metric label="Win Rate" value={`${stats.winRate}%`} />
-        <Metric label="Total Setups" value={String(stats.totalSetups)} />
-        <Metric label="Closed Setups" value={String(stats.closedSetups)} />
+        <Metric label="Win Rate" end={stats.winRate} suffix="%" />
+        <Metric label="Total Setups" end={stats.totalSetups} />
+        <Metric label="Closed Setups" end={stats.closedSetups} />
         <p className="text-sm text-slate-500 md:col-span-3">
           Updated in real time from our public track record.
         </p>
@@ -138,7 +139,7 @@ export default async function AboutPage() {
               Track Record
             </p>
             <p className="mt-4 text-7xl font-bold text-green-400 sm:text-8xl">
-              {stats.winRate}%
+              <CountUp end={stats.winRate} suffix="%" />
             </p>
             <p className="mt-3 text-sm text-slate-400">
               win rate from {stats.closedSetups} closed setups
@@ -147,19 +148,25 @@ export default async function AboutPage() {
 
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             <div className="rounded-lg border border-white/10 bg-black/20 p-4 text-center">
-              <p className="text-3xl font-bold text-green-400">{stats.wins}</p>
+              <p className="text-3xl font-bold text-green-400">
+                <CountUp end={stats.wins} />
+              </p>
               <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                 Wins
               </p>
             </div>
             <div className="rounded-lg border border-white/10 bg-black/20 p-4 text-center">
-              <p className="text-3xl font-bold text-red-400">{stats.losses}</p>
+              <p className="text-3xl font-bold text-red-400">
+                <CountUp end={stats.losses} />
+              </p>
               <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                 Losses
               </p>
             </div>
             <div className="rounded-lg border border-white/10 bg-black/20 p-4 text-center">
-              <p className="text-3xl font-bold text-yellow-400">{stats.activeSetups}</p>
+              <p className="text-3xl font-bold text-yellow-400">
+                <CountUp end={stats.activeSetups} />
+              </p>
               <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                 Active
               </p>
@@ -206,9 +213,9 @@ export default async function AboutPage() {
         </Card>
 
         <div className="grid gap-5 md:col-span-3 md:grid-cols-3">
-          <StatCard label="Win Rate" value={`${stats.winRate}%`} note="From all closed setups" />
-          <StatCard label="Total Setups" value={String(stats.totalSetups)} note="Published since launch" />
-          <StatCard label="Closed Setups" value={String(stats.closedSetups)} note="WIN or LOSS — all recorded" />
+          <StatCard label="Win Rate" end={stats.winRate} suffix="%" note="From all closed setups" />
+          <StatCard label="Total Setups" end={stats.totalSetups} note="Published since launch" />
+          <StatCard label="Closed Setups" end={stats.closedSetups} note="WIN or LOSS — all recorded" />
         </div>
 
         <div id="disclaimer" className="rounded-lg border border-white/10 bg-slate-900/60 p-6 md:col-span-3">
@@ -417,20 +424,34 @@ function TimelineConnector() {
   return <div className="mt-5 hidden h-px flex-1 bg-white/10 md:block" />;
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({ label, end, suffix }: { label: string; end: number; suffix?: string }) {
   return (
     <Card className="p-6">
       <p className="text-sm text-slate-400">{label}</p>
-      <p className="mt-2 text-4xl font-bold text-green-400">{value}</p>
+      <p className="mt-2 text-4xl font-bold text-green-400">
+        <CountUp end={end} suffix={suffix} />
+      </p>
     </Card>
   );
 }
 
-function StatCard({ label, value, note }: { label: string; value: string; note: string }) {
+function StatCard({
+  label,
+  end,
+  note,
+  suffix
+}: {
+  label: string;
+  end: number;
+  note: string;
+  suffix?: string;
+}) {
   return (
     <Card className="p-6">
       <p className="text-sm text-slate-400">{label}</p>
-      <p className="mt-2 text-4xl font-bold text-green-400">{value}</p>
+      <p className="mt-2 text-4xl font-bold text-green-400">
+        <CountUp end={end} suffix={suffix} />
+      </p>
       <p className="mt-1 text-xs text-slate-500">{note}</p>
     </Card>
   );
