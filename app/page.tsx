@@ -232,6 +232,37 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* PRE-FOOTER CTA */}
+      <section className="container py-16">
+        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-8 py-14 text-center md:px-16">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="h-64 w-64 rounded-full bg-green-500/10 blur-3xl" />
+          </div>
+          <div className="relative z-10">
+            <Badge className="mb-4">Start today</Badge>
+            <h2 className="text-4xl font-bold text-white md:text-5xl lg:text-6xl">
+              Trade with structure.
+              <br />
+              Build a real edge.
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-7 text-slate-400">
+              Access live trade setups, personal trade journal, economic calendar, weekly recaps, and structured academy content. Cancel any time.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Button asChild className="h-11 px-8 text-base">
+                <Link href="/pricing">View Pricing Plans</Link>
+              </Button>
+              <Button asChild variant="ghost" className="h-11 border border-white/20 px-8 text-base">
+                <Link href="/trading-ideas">See Trading Ideas →</Link>
+              </Button>
+            </div>
+            <p className="mt-6 text-xs text-slate-600">
+              Educational content only · Not financial advice · Cancel anytime
+            </p>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
