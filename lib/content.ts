@@ -125,6 +125,26 @@ export async function getNewsItem(slug: string) {
   );
 }
 
+export async function getRelatedNews(category: string, excludeSlug: string, limit = 3) {
+  const normalized = category.toUpperCase();
+  const fallback = news
+    .filter((item) => item.category === normalized && item.slug !== excludeSlug)
+    .slice(0, limit);
+
+  return withFallback(
+    () =>
+      prisma.news.findMany({
+        where: {
+          category: normalized as never,
+          slug: { not: excludeSlug }
+        },
+        orderBy: { publishedAt: "desc" },
+        take: limit
+      }),
+    fallback
+  );
+}
+
 export async function getTradeSetups() {
   return withFallback<AppTradeSetup[]>(
     async () => {
