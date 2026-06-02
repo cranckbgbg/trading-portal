@@ -51,3 +51,12 @@ body {
   backdrop-filter: blur(8px);
   background: linear-gradient(180deg, rgba(17, 24, 39, 0.28), rgba(17, 24, 39, 0.82));
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

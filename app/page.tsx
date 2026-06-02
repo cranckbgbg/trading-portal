@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { CountUp } from "@/components/count-up";
 import { SetupCard } from "@/components/setup-card";
 import { MarketBriefCard } from "@/components/market-brief-card";
+import { TestimonialsSection } from "@/components/testimonials-section";
 import { calendarEvents } from "@/lib/calendar-data";
 import { getArticles, getLatestBrief, getLatestRecap, getNews, getStats, getTradeSetups } from "@/lib/content";
 import { formatDate } from "@/lib/utils";
@@ -61,6 +62,8 @@ export default async function HomePage() {
           <SetupCard setup={normalizeSetup(latestSetups[0])} locked />
         </div>
       </section>
+
+      <TestimonialsSection />
 
       <section className="container pb-6">
         <MarketBriefCard brief={latestBrief} />
