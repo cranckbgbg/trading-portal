@@ -3,6 +3,7 @@ import { ArrowRight, BarChart3, BookOpen, Newspaper, ShieldCheck, Zap } from "lu
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { CountUp } from "@/components/count-up";
 import { SetupCard } from "@/components/setup-card";
 import { MarketBriefCard } from "@/components/market-brief-card";
 import { calendarEvents } from "@/lib/calendar-data";
@@ -44,9 +45,9 @@ export default async function HomePage() {
             </Button>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
-            <HeroStat label="Public win rate" value={`${stats.winRate}%`} />
-            <HeroStat label="Total setups" value={`${stats.totalSetups}+`} />
-            <HeroStat label="Members" value={`${stats.members.toLocaleString()}+`} />
+            <HeroStat label="Public win rate" end={stats.winRate} suffix="%" />
+            <HeroStat label="Total setups" end={stats.totalSetups} suffix="+" />
+            <HeroStat label="Members" end={stats.members} suffix="+" />
           </div>
         </div>
         <div className="rounded-lg border border-green-500/20 bg-card p-4 shadow-glow">
@@ -202,10 +203,12 @@ export default async function HomePage() {
   );
 }
 
-function HeroStat({ label, value }: { label: string; value: string }) {
+function HeroStat({ label, end, suffix }: { label: string; end: number; suffix?: string }) {
   return (
     <div className="rounded-lg border border-white/10 bg-card p-4">
-      <p className="text-3xl font-bold text-green-400">{value}</p>
+      <p className="text-3xl font-bold text-green-400">
+        <CountUp end={end} suffix={suffix} />
+      </p>
       <p className="mt-1 text-sm text-slate-400">{label}</p>
     </div>
   );
