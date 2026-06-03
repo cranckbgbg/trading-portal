@@ -19,7 +19,7 @@ export default async function NewsPage({
       <PageHero
         eyebrow="Market News"
         title="Fast market updates filtered by Forex, Gold, Crypto, and Macro."
-        description="The feed is built for manual editorial control and automated n8n publishing through a protected webhook."
+        description="Stay ahead with fast market updates across Forex, Gold, Crypto, and Macro. Filtered by category so you see what matters to your trading."
       />
       <section className="container pb-16">
         <div className="flex flex-wrap gap-2">
