@@ -7,7 +7,7 @@ export default async function AdminArticlesPage() {
 
   return (
     <>
-      <PageHero eyebrow="Admin Articles" title="Create, edit, and delete academy articles." description="This screen is ready for CRUD forms once authentication and database writes are enabled." />
+      <PageHero eyebrow="Admin Articles" title="Manage academy education content." description="Create and organise educational articles across Forex, Risk Management, Psychology and Strategy categories." />
       <section className="container grid gap-4 pb-16">
         {articles.map((article) => (
           <Card key={article.slug} className="p-5">
