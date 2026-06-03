@@ -7,11 +7,11 @@ import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
 
 const navigation = [
+  { href: "/trading-ideas", label: "Trade Setups" },
   { href: "/academy", label: "Academy" },
   { href: "/news", label: "News" },
   { href: "/calendar", label: "Calendar" },
   { href: "/weekly-recap", label: "Recaps" },
-  { href: "/trading-ideas", label: "Trading Ideas" },
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" }
 ];
