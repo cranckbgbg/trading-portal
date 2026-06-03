@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { AcademyProgressList } from "@/components/academy-progress-list";
 import { academyCategories } from "@/lib/sample-data";
 import { getArticles } from "@/lib/content";
