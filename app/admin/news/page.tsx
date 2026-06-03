@@ -7,7 +7,7 @@ export default async function AdminNewsPage() {
 
   return (
     <>
-      <PageHero eyebrow="Admin News" title="Manage editorial and n8n-published market news." description="Automated webhook entries and manual stories can be reviewed from this area." />
+      <PageHero eyebrow="Admin News" title="Manage market news and editorial content." description="Review, publish and organise market news across Forex, Gold, Crypto and Macro categories." />
       <section className="container grid gap-4 pb-16">
         {news.map((item) => (
           <Card key={item.slug} className="p-5">

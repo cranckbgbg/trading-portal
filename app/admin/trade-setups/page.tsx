@@ -7,7 +7,7 @@ export default async function AdminTradeSetupsPage() {
 
   return (
     <>
-      <PageHero eyebrow="Admin Trade Setups" title="Create trade setups and mark outcomes as WIN or LOSS." description="The API routes support creating trade setups and updating their status for win-rate reporting." />
+      <PageHero eyebrow="Admin Trade Setups" title="Manage trade setups and record outcomes." description="Publish new setups with entry, take profit and stop loss. Close them as WIN or LOSS to maintain a transparent track record." />
       <section className="container grid gap-4 pb-16">
         {setups.map((setup, index) => (
           <Card key={`${setup.symbol}-${index}`} className="grid gap-3 p-5 md:grid-cols-5 md:items-center">
