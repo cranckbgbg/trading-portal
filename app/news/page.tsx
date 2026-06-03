@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { getNews } from "@/lib/content";
 import { formatDate } from "@/lib/utils";
 

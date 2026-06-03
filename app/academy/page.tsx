@@ -28,6 +28,28 @@ export default async function AcademyPage() {
         </div>
         <AcademyProgressList articles={serializedArticles} />
       </section>
+
+      <section className="container pb-16">
+        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-8 py-12 text-center">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="h-48 w-48 rounded-full bg-green-500/10 blur-3xl" />
+          </div>
+          <div className="relative z-10">
+            <h2 className="text-2xl font-bold text-white md:text-3xl">Ready to put your knowledge into practice?</h2>
+            <p className="mx-auto mt-3 max-w-md text-slate-400">
+              Subscribe to access live trade setups with defined entry, take profit, and stop loss — and track your own results in the trade journal.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <Button asChild size="lg">
+                <Link href="/pricing">View Pricing</Link>
+              </Button>
+              <Button asChild variant="ghost" size="lg">
+                <Link href="/trading-ideas">See Trading Ideas →</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
