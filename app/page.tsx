@@ -41,12 +41,12 @@ export default async function HomePage() {
             Structured trade setups, transparent WIN/LOSS history, daily market briefs, and an academy built around execution discipline — not predictions.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="h-12 px-7 text-base">
+            <Button asChild size="default" className="h-12 px-7 text-base">
               <Link href="/pricing">
                 Start Free Trial <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="h-12 px-7 text-base">
+            <Button asChild variant="outline" size="default" className="h-12 px-7 text-base">
               <Link href="/trading-ideas">See Trading Ideas</Link>
             </Button>
           </div>

@@ -59,10 +59,10 @@ export default async function NewsPage({
               Subscribers get live trade setups with exact entry and risk levels — not just news, but a structured process for acting on it.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Button asChild size="lg">
+              <Button asChild size="default">
                 <Link href="/pricing">View Pricing</Link>
               </Button>
-              <Button asChild variant="ghost" size="lg">
+              <Button asChild variant="ghost" size="default">
                 <Link href="/trading-ideas">Browse Trading Ideas →</Link>
               </Button>
             </div>

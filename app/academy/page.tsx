@@ -40,10 +40,10 @@ export default async function AcademyPage() {
               Subscribe to access live trade setups with defined entry, take profit, and stop loss — and track your own results in the trade journal.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Button asChild size="lg">
+              <Button asChild size="default">
                 <Link href="/pricing">View Pricing</Link>
               </Button>
-              <Button asChild variant="ghost" size="lg">
+              <Button asChild variant="ghost" size="default">
                 <Link href="/trading-ideas">See Trading Ideas →</Link>
               </Button>
             </div>
