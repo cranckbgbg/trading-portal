@@ -26,40 +26,49 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="container grid min-h-[calc(100vh-4rem)] items-center gap-10 py-12 md:grid-cols-[1.1fr_0.9fr] md:py-16">
+      {/* HERO */}
+      <section className="container grid items-center gap-12 py-16 md:min-h-[calc(100vh-4rem)] md:grid-cols-[1.1fr_0.9fr] md:py-20">
         <div>
-          <Badge>Professional trade setups and education</Badge>
-          <h1 className="mt-6 max-w-4xl text-5xl font-bold tracking-tight text-white md:text-7xl">
-            Trade with sharper context, cleaner risk, and verified setup history.
+          <div className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-xs font-semibold text-green-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
+            Live trade setups — updated daily
+          </div>
+          <h1 className="mt-6 text-5xl font-bold tracking-tight text-white md:text-6xl lg:text-7xl">
+            Trade smarter.<br />
+            <span className="text-green-400">Build a real edge.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            A modern portal inspired by leading trading education platforms, rebuilt around subscriber trade setups, transparent performance, fast market news, and structured academy content.
+          <p className="mt-6 max-w-lg text-lg leading-8 text-slate-300">
+            Structured trade setups, transparent WIN/LOSS history, daily market briefs, and an academy built around execution discipline — not predictions.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="default">
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild size="lg" className="h-12 px-7 text-base">
               <Link href="/pricing">
-                Unlock Trade Setups <ArrowRight className="h-4 w-4" />
+                Start Free Trial <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="default">
-              <Link href="/academy">Explore Academy</Link>
+            <Button asChild variant="outline" size="lg" className="h-12 px-7 text-base">
+              <Link href="/trading-ideas">See Trading Ideas</Link>
             </Button>
           </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-3">
-            <HeroStat label="Public win rate" end={stats.winRate} suffix="%" />
-            <HeroStat label="Total setups" end={stats.totalSetups} suffix="+" />
+          <div className="mt-10 grid grid-cols-3 gap-4">
+            <HeroStat label="Win rate" end={stats.winRate} suffix="%" />
+            <HeroStat label="Setups published" end={stats.totalSetups} suffix="+" />
             <HeroStat label="Members" end={stats.members} suffix="+" />
           </div>
         </div>
-        <div className="rounded-lg border border-green-500/20 bg-card p-4 shadow-glow">
-          <div className="mb-4 flex items-center justify-between">
+        <div className="rounded-xl border border-green-500/25 bg-card p-5 shadow-glow">
+          <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
             <div>
-              <p className="text-sm text-slate-400">Latest premium idea</p>
-              <p className="font-semibold text-white">Subscriber feed preview</p>
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+                <p className="text-xs font-semibold uppercase tracking-wide text-green-400">Live Setup</p>
+              </div>
+              <p className="mt-0.5 font-semibold text-white">Latest from the subscriber feed</p>
             </div>
             <Zap className="h-5 w-5 text-green-400" />
           </div>
           <SetupCard setup={normalizeSetup(latestSetups[0])} locked />
+          <p className="mt-4 text-center text-xs text-slate-600">Subscribe to unlock all setups with exact levels</p>
         </div>
       </section>
 
@@ -156,10 +165,10 @@ export default async function HomePage() {
 
       <section className="border-y border-white/10 bg-slate-950/35 py-12">
         <div className="container grid gap-4 md:grid-cols-4">
-          <Feature icon={<ShieldCheck />} title="Verified outcomes" text="Trade setups can be marked WIN or LOSS by admins, feeding public trust stats." />
-          <Feature icon={<BarChart3 />} title="Setup-first product" text="Trading ideas are visible to guests while exact execution stays paywalled." />
-          <Feature icon={<Newspaper />} title="Automated news" text="n8n can publish market updates directly into the news feed." />
-          <Feature icon={<BookOpen />} title="Structured academy" text="Education is organized by category for clear progression." />
+          <Feature icon={<ShieldCheck />} title="Transparent track record" text="Every setup is closed publicly as WIN or LOSS. No deleted losses, no inflated numbers." />
+          <Feature icon={<BarChart3 />} title="Structured trade setups" text="Entry, take profit, and stop loss defined in advance. Study the levels and build your process." />
+          <Feature icon={<Newspaper />} title="Daily market context" text="Fast market news filtered by Forex, Gold, Crypto and Macro — plus a daily brief every morning." />
+          <Feature icon={<BookOpen />} title="Education that compounds" text="Academy content organised by category: Forex, Risk Management, Psychology, Strategy, and more." />
         </div>
       </section>
 
@@ -185,7 +194,7 @@ export default async function HomePage() {
           <Badge>Market desk</Badge>
           <h2 className="mt-4 text-3xl font-bold md:text-4xl">Fast news by market category</h2>
           <p className="mt-4 text-slate-300">
-            Forex, gold, crypto, and macro updates are designed for quick filtering and automated publishing workflows.
+            Forex, gold, crypto, and macro updates — filtered by category so you stay informed on what matters to your trading.
           </p>
           <Button asChild className="mt-6" variant="outline">
             <Link href="/news">Open news feed</Link>
