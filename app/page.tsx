@@ -43,7 +43,7 @@ export default async function HomePage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="default" className="h-12 px-7 text-base">
               <Link href="/pricing">
-                Start Free Trial <ArrowRight className="h-4 w-4" />
+                Unlock Trade Setups <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
             <Button asChild variant="outline" size="default" className="h-12 px-7 text-base">
