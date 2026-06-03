@@ -27,7 +27,7 @@ export default function PricingPage() {
       <PageHero
         eyebrow="Pricing"
         title="Unlock the trade setup feed and trade with a clearer process."
-        description="Stripe checkout is wired through API routes and ready for real price IDs once the account is configured."
+        description="Full access to live trade setups, trade journal, economic calendar, weekly recaps, and the complete academy. Cancel any time."
       />
       <section className="container grid gap-5 pb-16 md:grid-cols-2">
         {plans.map((plan) => (
