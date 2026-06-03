@@ -47,6 +47,28 @@ export default async function NewsPage({
           ))}
         </div>
       </section>
+
+      <section className="container pb-16">
+        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-8 py-12 text-center">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="h-48 w-48 rounded-full bg-green-500/10 blur-3xl" />
+          </div>
+          <div className="relative z-10">
+            <h2 className="text-2xl font-bold text-white md:text-3xl">Get structured trade ideas alongside the news</h2>
+            <p className="mx-auto mt-3 max-w-md text-slate-400">
+              Subscribers get live trade setups with exact entry and risk levels — not just news, but a structured process for acting on it.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <Button asChild size="lg">
+                <Link href="/pricing">View Pricing</Link>
+              </Button>
+              <Button asChild variant="ghost" size="lg">
+                <Link href="/trading-ideas">Browse Trading Ideas →</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
