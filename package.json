@@ -12,7 +12,11 @@
     "prisma:deploy": "prisma migrate deploy",
     "prisma:push": "prisma db push",
     "prisma:seed": "tsx prisma/seed.ts",
-    "prisma:validate": "prisma validate"
+    "prisma:validate": "prisma validate",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d",
+    "db:setup": "prisma migrate deploy && prisma db seed"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
