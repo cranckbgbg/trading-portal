@@ -1,0 +1,29 @@
+# Local development PostgreSQL for xrent.bg.
+# The official postgres image bundles contrib modules, so `btree_gist`
+# (required by the no-double-booking exclusion constraint, B-01) is available.
+#
+#   docker compose up -d        # start the database
+#   docker compose down         # stop (keeps data)
+#   docker compose down -v      # stop and DELETE all data (fresh start)
+
+services:
+  db:
+    image: postgres:16
+    container_name: xrent-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: xrent
+      POSTGRES_PASSWORD: xrent
+      POSTGRES_DB: xrent
+    ports:
+      - "5432:5432"
+    volumes:
+      - xrent_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U xrent -d xrent"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  xrent_pgdata:
