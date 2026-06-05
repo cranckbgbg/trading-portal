@@ -2,3 +2,4 @@ node_modules/
 .next/
 .env
 outputs/
+tsconfig.tsbuildinfo

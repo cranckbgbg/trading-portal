@@ -1,3 +1,11 @@
+// xrent.bg — Prisma schema
+// Phase 1 data model. See ARCHITECTURE.md §3 and SPEC.md §4 (business rules B-01..B-10).
+//
+// NOTE on B-01 (no double booking):
+//   The overlap exclusion constraint (EXCLUDE USING gist + btree_gist) cannot be
+//   expressed in Prisma schema. It is added via raw SQL in the init migration.
+//   Reservation.startAt / endAt use @db.Timestamptz so tstzrange() works in the constraint.
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,157 +15,135 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  FREE
-  SUBSCRIBER
+// ----------------------------------------------------------------------------
+// Enums
+// ----------------------------------------------------------------------------
+
+enum Role {
   ADMIN
+  CUSTOMER
 }
 
-enum NewsCategory {
-  FOREX
-  GOLD
-  CRYPTO
-  MACRO
+enum CarStatus {
+  AVAILABLE
+  MAINTENANCE
+  RESERVED_PERSONAL
+  RETIRED
 }
 
-enum TradeDirection {
-  LONG
-  SHORT
+enum FuelType {
+  PETROL
+  DIESEL
+  HYBRID
+  ELECTRIC
+  LPG
 }
 
-enum TradeSetupStatus {
+enum Transmission {
+  MANUAL
+  AUTOMATIC
+}
+
+enum CarBlockReason {
+  MAINTENANCE
+  PERSONAL
+}
+
+enum AddOnPriceType {
+  PER_DAY
+  FLAT
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
   ACTIVE
-  WIN
-  LOSS
+  COMPLETED
+  CANCELLED
+  REJECTED
 }
+
+enum PaymentType {
+  RENTAL
+  DEPOSIT
+  REFUND
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+enum DepositStatus {
+  HELD
+  CAPTURED
+  RELEASED
+  PARTIAL
+}
+
+enum DocumentType {
+  LICENSE_FRONT
+  LICENSE_BACK
+  ID
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ConsentType {
+  GDPR_REGISTRATION
+  GDPR_RESERVATION
+  TERMS
+}
+
+// ----------------------------------------------------------------------------
+// Auth / Users (NextAuth + credentials)
+// ----------------------------------------------------------------------------
 
 model User {
-  id               String         @id @default(cuid())
-  email            String         @unique
-  name             String?
-  emailVerified    DateTime?
-  image            String?
-  role             UserRole       @default(FREE)
-  stripeCustomerId String?        @unique
-  createdAt        DateTime       @default(now())
-  accounts         Account[]
-  sessions         Session[]
-  subscriptions    Subscription[]
-  journalEntries   JournalEntry[]
-  articleProgress  ArticleProgress[]
-  watchlist         WatchlistItem[]
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  phone         String?
+  role          Role      @default(CUSTOMER)
+  emailVerified DateTime?
+  blocked       Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  reservations  Reservation[]
+  documents     Document[]
+  driverLicense DriverLicense?
+  consents      Consent[]
+  auditLogs     AuditLog[]     @relation("ActorAuditLogs")
+
+  @@index([role])
 }
 
-model Article {
-  id          String    @id @default(cuid())
-  title       String
-  slug        String    @unique
-  content     String
-  category    String
-  coverImage  String?
-  publishedAt DateTime  @default(now())
-}
-
-model News {
-  id          String       @id @default(cuid())
-  title       String
-  slug        String       @unique
-  content     String
-  source      String?
-  sourceUrl   String?
-  category    NewsCategory
-  publishedAt DateTime     @default(now())
-}
-
-model TradeSetup {
-  id          String          @id @default(cuid())
-  symbol      String
-  direction   TradeDirection
-  entryPrice  Decimal
-  takeProfit  Decimal
-  stopLoss    Decimal
-  status      TradeSetupStatus @default(ACTIVE)
-  publishedAt DateTime        @default(now())
-  closedAt    DateTime?
-}
-
-model MarketBrief {
-  id          String   @id @default(cuid())
-  title       String
-  body        String
-  markets     String[]
-  publishedAt DateTime @default(now())
-}
-
-model JournalEntry {
-  id         String         @id @default(cuid())
-  userId     String
-  symbol     String
-  direction  TradeDirection
-  entryPrice Decimal
-  exitPrice  Decimal?
-  lotSize    Decimal        @default(0.01)
-  outcome    String?
-  pnl        Decimal?
-  notes      String?
-  tradeDate  DateTime       @default(now())
-  createdAt  DateTime       @default(now())
-  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model ArticleProgress {
-  id        String   @id @default(cuid())
-  userId    String
-  articleId String
-  readAt    DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, articleId])
-}
-
-model WeeklyRecap {
-  id          String   @id @default(cuid())
-  weekLabel   String
-  summary     String
-  wins        Int
-  losses      Int
-  keyLesson   String
-  publishedAt DateTime @default(now())
-}
-
-model WatchlistItem {
-  id      String   @id @default(cuid())
-  userId  String
-  symbol  String
-  addedAt DateTime @default(now())
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, symbol])
-}
-
-model Subscription {
-  id                   String   @id @default(cuid())
-  userId               String
-  stripeSubscriptionId String   @unique
-  status               String
-  currentPeriodEnd     DateTime
-  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
+// NextAuth adapter tables (kept for future OAuth / DB-session support).
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -176,4 +162,247 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// ----------------------------------------------------------------------------
+// GDPR consents (B-08)
+// ----------------------------------------------------------------------------
+
+model Consent {
+  id            String      @id @default(cuid())
+  userId        String
+  type          ConsentType
+  policyVersion String
+  acceptedAt    DateTime    @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ----------------------------------------------------------------------------
+// Fleet
+// ----------------------------------------------------------------------------
+
+model Location {
+  id      String  @id @default(cuid())
+  name    String
+  address String
+  city    String
+  active  Boolean @default(true)
+
+  cars               Car[]
+  pickupReservations Reservation[] @relation("PickupLocation")
+  returnReservations Reservation[] @relation("ReturnLocation")
+}
+
+model Car {
+  id            String       @id @default(cuid())
+  brand         String
+  model         String
+  year          Int
+  category      String
+  fuel          FuelType
+  transmission  Transmission
+  seats         Int
+  doors         Int
+  dailyRate     Decimal      @db.Decimal(10, 2)
+  depositAmount Decimal      @db.Decimal(10, 2)
+  mileageLimit  Int? // km/day, null = unlimited
+  currency      String       @default("BGN")
+  locationId    String
+  status        CarStatus    @default(AVAILABLE)
+  active        Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  location     Location      @relation(fields: [locationId], references: [id])
+  images       CarImage[]
+  blocks       CarBlock[]
+  reservations Reservation[]
+
+  @@index([status])
+  @@index([category])
+  @@index([locationId])
+}
+
+model CarImage {
+  id        String @id @default(cuid())
+  carId     String
+  url       String
+  sortOrder Int    @default(0)
+
+  car Car @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@index([carId])
+}
+
+// Admin block of a car for a period — service or personal use (B-04).
+model CarBlock {
+  id        String         @id @default(cuid())
+  carId     String
+  startAt   DateTime       @db.Timestamptz(3)
+  endAt     DateTime       @db.Timestamptz(3)
+  reason    CarBlockReason
+  note      String?
+  createdBy String
+  createdAt DateTime       @default(now())
+
+  car Car @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@index([carId, startAt, endAt])
+}
+
+model AddOn {
+  id          String         @id @default(cuid())
+  name        String
+  description String?
+  priceType   AddOnPriceType
+  price       Decimal        @db.Decimal(10, 2)
+  active      Boolean        @default(true)
+
+  reservationAddOns ReservationAddOn[]
+}
+
+// ----------------------------------------------------------------------------
+// Reservations
+// ----------------------------------------------------------------------------
+
+model Reservation {
+  id               String            @id @default(cuid())
+  userId           String
+  carId            String
+  pickupLocationId String
+  returnLocationId String
+  startAt          DateTime          @db.Timestamptz(3)
+  endAt            DateTime          @db.Timestamptz(3)
+  status           ReservationStatus @default(PENDING)
+  priceTotal       Decimal           @db.Decimal(10, 2)
+  depositAmount    Decimal           @db.Decimal(10, 2)
+  currency         String            @default("BGN")
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  user           User               @relation(fields: [userId], references: [id])
+  car            Car                @relation(fields: [carId], references: [id])
+  pickupLocation Location           @relation("PickupLocation", fields: [pickupLocationId], references: [id])
+  returnLocation Location           @relation("ReturnLocation", fields: [returnLocationId], references: [id])
+  addOns         ReservationAddOn[]
+  payments       Payment[]
+  deposit        Deposit?
+
+  // B-01: overlap exclusion constraint added in raw SQL migration.
+  @@index([carId, startAt, endAt])
+  @@index([userId])
+  @@index([status])
+}
+
+model ReservationAddOn {
+  id            String  @id @default(cuid())
+  reservationId String
+  addOnId       String
+  quantity      Int     @default(1)
+  priceSnapshot Decimal @db.Decimal(10, 2)
+
+  reservation Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  addOn       AddOn       @relation(fields: [addOnId], references: [id])
+
+  @@index([reservationId])
+}
+
+// ----------------------------------------------------------------------------
+// Payments & deposits (B-06) — models only in Phase 1; Stripe wiring in Phase 4.
+// ----------------------------------------------------------------------------
+
+model Payment {
+  id                    String        @id @default(cuid())
+  reservationId         String
+  type                  PaymentType
+  status                PaymentStatus @default(PENDING)
+  amount                Decimal       @db.Decimal(10, 2)
+  currency              String        @default("BGN")
+  stripePaymentIntentId String?       @unique
+  stripeSessionId       String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  reservation Reservation @relation(fields: [reservationId], references: [id])
+
+  @@index([reservationId])
+  @@index([status])
+}
+
+model Deposit {
+  id            String        @id @default(cuid())
+  reservationId String        @unique
+  amount        Decimal       @db.Decimal(10, 2)
+  status        DepositStatus @default(HELD)
+  stripeRef     String?
+  note          String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  reservation Reservation @relation(fields: [reservationId], references: [id])
+}
+
+// Idempotency guard for Stripe webhooks (B-05). Used from Phase 4.
+model WebhookEvent {
+  id            String   @id @default(cuid())
+  stripeEventId String   @unique
+  type          String
+  processedAt   DateTime @default(now())
+}
+
+// ----------------------------------------------------------------------------
+// Documents & driver license (F-15, F-16, B-03)
+// ----------------------------------------------------------------------------
+
+model Document {
+  id           String             @id @default(cuid())
+  userId       String
+  type         DocumentType
+  storageKey   String
+  status       VerificationStatus @default(PENDING)
+  rejectReason String?
+  createdAt    DateTime           @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model DriverLicense {
+  id         String             @id @default(cuid())
+  userId     String             @unique
+  number     String
+  country    String
+  categories String
+  expiresAt  DateTime
+  status     VerificationStatus @default(PENDING)
+  verifiedBy String?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ----------------------------------------------------------------------------
+// Audit log (B-07)
+// ----------------------------------------------------------------------------
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actorRole  String?
+  action     String
+  entityType String
+  entityId   String
+  before     Json?
+  after      Json?
+  createdAt  DateTime @default(now())
+
+  actor User? @relation("ActorAuditLogs", fields: [actorId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
 }

@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 5%;
-  --foreground: 210 40% 98%;
-  --card: 0 0% 8%;
-  --card-foreground: 210 40% 98%;
-  --primary: 142 100% 39%;
-  --primary-foreground: 222 47% 7%;
-  --secondary: 222 31% 16%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 222 28% 15%;
-  --muted-foreground: 215 20% 65%;
-  --accent: 142 100% 39%;
-  --accent-foreground: 222 47% 7%;
-  --border: 0 0% 15%;
-  --input: 221 24% 20%;
-  --ring: 142 100% 39%;
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --primary: 221 83% 53%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 221 83% 53%;
+  --accent-foreground: 210 40% 98%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 221 83% 53%;
 }
 
 * {
@@ -30,43 +30,8 @@ html {
 
 body {
   @apply bg-background text-foreground antialiased;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(0, 200, 5, 0.06), transparent 32rem),
-    #0d0d0d;
 }
 
 ::selection {
-  background: rgba(0, 200, 5, 0.3);
-}
-
-.setup-blur {
-  position: relative;
-  overflow: hidden;
-}
-
-.setup-blur::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(8px);
-  background: linear-gradient(180deg, rgba(17, 24, 39, 0.28), rgba(17, 24, 39, 0.82));
-}
-
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  animation: marquee 40s linear infinite;
-  will-change: transform;
+  background: hsl(var(--primary) / 0.2);
 }

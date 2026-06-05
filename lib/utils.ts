@@ -14,9 +14,16 @@ export function slugify(value: string) {
 }
 
 export function formatDate(value: Date | string) {
-  return new Intl.DateTimeFormat("en", {
-    month: "short",
+  return new Intl.DateTimeFormat("bg-BG", {
     day: "numeric",
+    month: "short",
     year: "numeric"
   }).format(new Date(value));
+}
+
+export function formatPrice(value: number, currency = "BGN") {
+  return new Intl.NumberFormat("bg-BG", {
+    style: "currency",
+    currency
+  }).format(value);
 }
